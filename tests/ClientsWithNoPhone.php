@@ -9,11 +9,13 @@ class ClientsWithNoPhone extends BaseReporter
 {
     protected $title = 'Relatório - Clientes sem Telefone';
 
+    protected $subtitle = 'Somente Clientes';
+
     protected $view = 'reports.clients_no_phone';
 
     public  function generate(Request $terms)
     {
-        $this->data = ['clients' => [
+        $this->data = [
             [
                 'id' => 1,
                 'name' => 'Sr. Carlton'
@@ -22,6 +24,6 @@ class ClientsWithNoPhone extends BaseReporter
                 'id' => 1,
                 'name' => 'Sra. Benson'
             ]
-        ]];
+        ];
     }
 }

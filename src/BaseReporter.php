@@ -8,8 +8,8 @@ use Illuminate\Http\Request;
  * BaseReporter
  *
  * @author  Matheus Lopes Santos <fale_com_lopez@hotmail.com>
- * @version 1.0.0
- * @since   19/02/2018
+ * @version 1.1.0
+ * @since   20/02/2018
  * @package Igrejanet\Reporter
  */
 abstract class BaseReporter implements Contracts\ReporterContract
@@ -18,6 +18,16 @@ abstract class BaseReporter implements Contracts\ReporterContract
      * @var string
      */
     protected $title = '';
+
+    /**
+     * @var string
+     */
+    protected $subtitle = '';
+
+    /**
+     * @var string
+     */
+    protected $orientation = 'portrait';
 
     /**
      * @var string
@@ -49,6 +59,44 @@ abstract class BaseReporter implements Contracts\ReporterContract
     }
 
     /**
+     * @param   string  $subtitle
+     * @return  $this
+     */
+    public function setSubTitle(string $subtitle)
+    {
+        $this->subtitle = $subtitle;
+
+        return $this;
+    }
+
+    /**
+     * @return  string
+     */
+    public function getSubTitle() : string
+    {
+        return $this->subtitle;
+    }
+
+    /**
+     * @param   string  $orientation
+     * @return  $this
+     */
+    public function setOrientation(string $orientation)
+    {
+        $this->orientation = $orientation;
+
+        return $this;
+    }
+
+    /**
+     * @return  string
+     */
+    public function getOrientation() : string
+    {
+        return $this->orientation;
+    }
+
+    /**
      * @return mixed
      */
     public function getView() : string
@@ -68,14 +116,15 @@ abstract class BaseReporter implements Contracts\ReporterContract
     }
 
     /**
-     * @return mixed
+     * @return array
      */
-    public function getProcessedData()
+    public function getProcessedData() : array
     {
-        return [
-            'title' => $this->title,
-            'data'  => $this->data
-        ];
+        $vars = get_object_vars($this);
+
+        unset($vars['view']);
+
+        return $vars;
     }
 
     /**
