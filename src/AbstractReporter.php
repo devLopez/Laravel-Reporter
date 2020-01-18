@@ -2,17 +2,14 @@
 
 namespace Igrejanet\Reporter;
 
-use Illuminate\Http\Request;
-
 /**
- * BaseReporter
+ * AbstractReporter
  *
  * @author  Matheus Lopes Santos <fale_com_lopez@hotmail.com>
- * @version 1.1.0
- * @since   20/02/2018
+ * @version 2.0.0
  * @package Igrejanet\Reporter
  */
-abstract class BaseReporter implements Contracts\ReporterContract
+abstract class AbstractReporter
 {
     /**
      * @var string
@@ -114,22 +111,4 @@ abstract class BaseReporter implements Contracts\ReporterContract
 
         return $this;
     }
-
-    /**
-     * @return array
-     */
-    public function getProcessedData() : array
-    {
-        $vars = get_object_vars($this);
-
-        unset($vars['view']);
-
-        return $vars;
-    }
-
-    /**
-     * @param   Request $terms
-     * @return  void
-     */
-    public abstract function generate(Request $terms);
 }

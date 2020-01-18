@@ -2,10 +2,10 @@
 
 namespace Tests;
 
-use Igrejanet\Reporter\BaseReporter;
+use Igrejanet\Reporter\AbstractReporter;
 use Illuminate\Http\Request;
 
-class ClientsWithNoPhone extends BaseReporter
+class ClientsWithNoPhone extends AbstractReporter
 {
     protected $title = 'Relatório - Clientes sem Telefone';
 
