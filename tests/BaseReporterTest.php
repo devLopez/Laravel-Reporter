@@ -2,8 +2,8 @@
 
 namespace Tests;
 
-use Igrejanet\Reporter\Contracts\ReporterContract;
-use Illuminate\Http\Request;
+use Igrejanet\Reporter\Interfaces\ReporterInterface;
+use Illuminate\Support\Collection;
 use PHPUnit\Framework\TestCase;
 
 class BaseReporterTest extends TestCase
@@ -13,20 +13,28 @@ class BaseReporterTest extends TestCase
         $title      = 'Relatório - Clientes sem Telefone';
         $subtitle   = 'Somente Clientes';
 
-        $request = new Request();
+        $collection = new Collection([
+            [
+                'name' => 'Martin Jose',
+                'email' => 'martin.jose@gmail.com'
+            ],
+            [
+                'name' => 'Maria Antonieta',
+                'email' => 'maria.antonieta@gmail.com'
+            ]
+        ]);
 
         $report = new ClientsWithNoPhone();
-        $report->generate($request);
+        $report->generate($collection);
 
-        $data = $report->getProcessedData();
-
-        $this->assertInstanceOf(ReporterContract::class, $report);
+        $this->assertInstanceOf(ReporterInterface::class, $report);
         $this->assertEquals($title, $report->getTitle());
         $this->assertEquals($subtitle, $report->getSubTitle());
         $this->assertEquals('portrait', $report->getOrientation());
         $this->assertEquals('reports.clients_no_phone', $report->getView());
-        $this->assertEquals($title, $data['title']);
-        $this->assertArrayHasKey('title', $data);
-        $this->assertArrayHasKey('data', $data);
+        $this->assertEquals($title, $report->getTitle());
+        $this->assertEquals($subtitle, $report->getSubtitle());
+        $this->assertEquals(2, $report->getTotal());
+        $this->assertEquals(1, $report->getTotalPages());
     }
 }
