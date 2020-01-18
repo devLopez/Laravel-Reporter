@@ -2,6 +2,10 @@
 
 namespace Igrejanet\Reporter;
 
+use Igrejanet\Reporter\Interfaces\ReporterInterface;
+use Illuminate\Support\Collection;
+use InvalidArgumentException;
+
 /**
  * AbstractReporter
  *
@@ -9,7 +13,7 @@ namespace Igrejanet\Reporter;
  * @version 2.0.0
  * @package Igrejanet\Reporter
  */
-abstract class AbstractReporter
+abstract class AbstractReporter implements ReporterInterface
 {
     /**
      * @var string
@@ -32,12 +36,39 @@ abstract class AbstractReporter
     protected $view;
 
     /**
-     * @var mixed
+     * @var int
      */
-    protected $data;
+    protected $perPage = 30;
 
     /**
-     * @return mixed
+     * @var int
+     */
+    protected $total;
+
+    /**
+     * @var Collection
+     */
+    protected $pages;
+
+    /**
+     * @var int
+     */
+    protected $totalPages;
+
+    /**
+     * @param Collection $data
+     */
+    public function generate(Collection $data)
+    {
+        $pages = $data->chunk($this->perPage);
+
+        $this->setTotal($data->count());
+        $this->setPages($pages);
+        $this->setTotalPages($pages->count());
+    }
+
+    /**
+     * @return string
      */
     public function getTitle() : string
     {
@@ -45,8 +76,8 @@ abstract class AbstractReporter
     }
 
     /**
-     * @param   mixed  $title
-     * @return  $this
+     * @param string $title
+     * @return $this
      */
     public function setTitle(string $title)
     {
@@ -56,10 +87,18 @@ abstract class AbstractReporter
     }
 
     /**
-     * @param   string  $subtitle
-     * @return  $this
+     * @return string|null
      */
-    public function setSubTitle(string $subtitle)
+    public function getSubtitle() : ? string
+    {
+        return $this->subtitle;
+    }
+
+    /**
+     * @param string|null $subtitle
+     * @return $this
+     */
+    public function setSubtitle(string $subtitle = null)
     {
         $this->subtitle = $subtitle;
 
@@ -67,26 +106,7 @@ abstract class AbstractReporter
     }
 
     /**
-     * @return  string
-     */
-    public function getSubTitle() : string
-    {
-        return $this->subtitle;
-    }
-
-    /**
-     * @param   string  $orientation
-     * @return  $this
-     */
-    public function setOrientation(string $orientation)
-    {
-        $this->orientation = $orientation;
-
-        return $this;
-    }
-
-    /**
-     * @return  string
+     * @return string
      */
     public function getOrientation() : string
     {
@@ -94,7 +114,23 @@ abstract class AbstractReporter
     }
 
     /**
-     * @return mixed
+     * @param string $orientation
+     * @return $this
+     * @throws InvalidArgumentException
+     */
+    public function setOrientation(string $orientation)
+    {
+        if ( ! in_array($orientation, ['portrait', 'landscape']) ) {
+            throw new InvalidArgumentException('Invalid report orientation setted');
+        }
+
+        $this->orientation = $orientation;
+
+        return $this;
+    }
+
+    /**
+     * @return string
      */
     public function getView() : string
     {
@@ -102,13 +138,89 @@ abstract class AbstractReporter
     }
 
     /**
-     * @param   mixed  $view
-     * @return  $this
+     * @param string $view
+     * @return $this
      */
     public function setView(string $view)
     {
         $this->view = $view;
 
         return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPerPage() : int
+    {
+        return $this->perPage;
+    }
+
+    /**
+     * @param int $perPage
+     * @return $this
+     */
+    public function setPerPage(int $perPage)
+    {
+        $this->perPage = $perPage;
+
+        return $this;
+    }
+
+    /**
+     * @param int $total
+     * @return $this
+     */
+    public function setTotal(int $total)
+    {
+        $this->total = $total;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotal() : int
+    {
+        return $this->total;
+    }
+
+    /**
+     * @param Collection $pages
+     * @return $this
+     */
+    public function setPages(Collection $pages)
+    {
+        $this->pages = $pages;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getPages() : Collection
+    {
+        return $this->pages;
+    }
+
+    /**
+     * @param int $totalPages
+     * @return $this
+     */
+    public function setTotalPages(int $totalPages)
+    {
+        $this->totalPages = $totalPages;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotalPages() : int
+    {
+        return $this->totalPages;
     }
 }
