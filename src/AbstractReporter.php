@@ -58,7 +58,7 @@ abstract class AbstractReporter implements ReporterInterface
     /**
      * @param Collection $data
      */
-    public function generate(Collection $data)
+    public function __construct(Collection $data)
     {
         $pages = $data->chunk($this->perPage);
 

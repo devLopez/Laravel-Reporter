@@ -24,8 +24,7 @@ class BaseReporterTest extends TestCase
             ]
         ]);
 
-        $report = new ClientsWithNoPhone();
-        $report->generate($collection);
+        $report = new ClientsWithNoPhone($collection);
 
         $this->assertInstanceOf(ReporterInterface::class, $report);
         $this->assertEquals($title, $report->getTitle());
