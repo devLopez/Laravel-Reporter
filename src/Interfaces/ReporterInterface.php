@@ -44,4 +44,6 @@ interface ReporterInterface
     public function setTotalPages(int $totalPages);
 
     public function getTotalPages() : int;
+
+    public function hasPages() : bool;
 }

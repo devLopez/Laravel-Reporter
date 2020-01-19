@@ -10,7 +10,7 @@ use InvalidArgumentException;
  * AbstractReporter
  *
  * @author  Matheus Lopes Santos <fale_com_lopez@hotmail.com>
- * @version 2.0.0
+ * @version 2.1.1
  * @package Igrejanet\Reporter
  */
 abstract class AbstractReporter implements ReporterInterface
@@ -222,5 +222,13 @@ abstract class AbstractReporter implements ReporterInterface
     public function getTotalPages() : int
     {
         return $this->totalPages;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasPages() : bool
+    {
+        return $this->pages->count() > 0;
     }
 }
